@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Art Gallery - Pameran Seni Digital</title>
+    <style>
+        /* CSS Global */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        .auth-buttons button {
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .login-btn {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+        
+        .login-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .register-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .register-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        main {
+            padding: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .close-btn {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Page Specific Styles */
+        .hero {
+            background-color: #3498db;
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .cta-button {
+            background-color: white;
+            color: #3498db;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .art-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .art-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .art-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .art-info {
+            padding: 1rem;
+        }
+        
+        .art-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .art-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+        
+        .buy-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+        
+        .buy-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Upload Form */
+        .upload-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .upload-form h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .upload-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            border: 1px dashed #ddd;
+            display: none;
+        }
+        
+        /* Transaction Page */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .transaction-table th, .transaction-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .transaction-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .transaction-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .comment {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comment:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .comment-date {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        .comment-content {
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header dengan Navigasi -->
+    <header>
+        <div class="logo">Digital Art Gallery</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#exhibition-info">Informasi Pameran</a></li>
+                <li><a href="#gallery">Galeri Karya</a></li>
+                <li><a href="#upload">Unggah Karya</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login-btn" id="loginBtn">Masuk</button>
+            <button class="register-btn" id="registerBtn">Daftar</button>
+        </div>
+    </header>
+
+    <!-- Modal Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Masuk ke Akun Anda</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Kata Sandi</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Masuk</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Belum punya akun? <a href="#" id="showRegister">Daftar sekarang</a></p>
+        </div>
+    </div>
+
+    <!-- Modal Registrasi -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Buat Akun Baru</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regName">Nama Lengkap</label>
+                    <input type="text" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Kata Sandi</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Konfirmasi Kata Sandi</label>
+                    <input type="password" id="regConfirmPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Daftar</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Sudah punya akun? <a href="#" id="showLogin">Masuk</a></p>
+        </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <main>
+        <!-- Halaman Beranda -->
+        <section id="home">
+            <div class="hero">
+                <h1>Selamat Datang di Pameran Seni Digital</h1>
+                <p>Temukan karya seni digital terbaik dari seniman berbakat di seluruh dunia. Jelajahi, beli, atau tampilkan karya Anda sendiri dalam platform kami.</p>
+                <button class="cta-button">Jelajahi Karya</button>
+            </div>
+            
+            <h2>Karya Terbaru</h2>
+            <div class="art-grid">
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop" alt="Abstract Digital Art">
+                    <div class="art-info">
+                        <h3>Cyber Dreams</h3>
+                        <p>Karya: Jane Doe</p>
+                        <p class="price">Rp 1.500.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop" alt="Neon Jungle">
+                    <div class="art-info">
+                        <h3>Neon Jungle</h3>
+                        <p>Karya: John Smith</p>
+                        <p class="price">Rp 2.300.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&h=300&fit=crop" alt="Abstract Reality">
+                    <div class="art-info">
+                        <h3>Abstract Reality</h3>
+                        <p>Karya: Alex Johnson</p>
+                        <p class="price">Rp 950.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=300&fit=crop" alt="Digital Portrait">
+                    <div class="art-info">
+                        <h3>Digital Portrait</h3>
+                        <p>Karya: Maria Garcia</p>
+                        <p class="price">Rp 1.800.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=400&h=300&fit=crop" alt="Space Odyssey">
+                    <div class="art-info">
+                        <h3>Space Odyssey</h3>
+                        <p>Karya: Chen Wei</p>
+                        <p class="price">Rp 2.750.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?w=400&h=300&fit=crop" alt="Geometric Dreams">
+                    <div class="art-info">
+                        <h3>Geometric Dreams</h3>
+                        <p>Karya: Sarah Miller</p>
+                        <p class="price">Rp 1.200.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop" alt="Digital Landscape">
+                    <div class="art-info">
+                        <h3>Digital Landscape</h3>
+                        <p>Karya: David Kim</p>
+                        <p class="price">Rp 2.100.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Color Flow">
+                    <div class="art-info">
+                        <h3>Color Flow</h3>
+                        <p>Karya: Lisa Wong</p>
+                        <p class="price">Rp 1.650.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop" alt="Urban Chaos">
+                    <div class="art-info">
+                        <h3>Urban Chaos</h3>
+                        <p>Karya: Michael Brown</p>
+                        <p class="price">Rp 1.900.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop" alt="Ethereal Beauty">
+                    <div class="art-info">
+                        <h3>Ethereal Beauty</h3>
+                        <p>Karya: Emma Wilson</p>
+                        <p class="price">Rp 2.450.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Informasi Pameran -->
+        <section id="exhibition-info" style="display: none;">
+            <h1>Informasi Pameran</h1>
+            <div style="background-color: white; padding: 2rem; border-radius: 8px; margin-top: 1rem;">
+                <h2>Pameran Seni Digital Kontemporer 2023</h2>
+                <p style="margin: 1rem 0;"><strong>Tanggal:</strong> 15 November - 15 Desember 2023</p>
+                <p style="margin: 1rem 0;"><strong>Lokasi:</strong> Virtual Exhibition - Digital Art Gallery</p>
+                
+                <h3 style="margin-top: 2rem;">Tentang Pameran</h3>
+                <p style="margin: 1rem 0; line-height: 1.6;">
+                    Pameran Seni Digital Kontemporer 2023 menampilkan karya-karya inovatif dari seniman digital terkemuka 
+                    dan pendatang baru dari seluruh dunia. Pameran ini bertujuan untuk mendorong batas-batas ekspresi 
+                    kreatif melalui medium digital dan mengeksplorasi hubungan antara teknologi dan seni.
+                </p>
+                
+                <h3 style="margin-top: 2rem;">Seniman yang Berpartisipasi</h3>
+                <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.6;">
+                    <li>Jane Doe (AS)</li>
+                    <li>John Smith (UK)</li>
+                    <li>Alex Johnson (Australia)</li>
+                    <li>Maria Garcia (Spanyol)</li>
+                    <li>Chen Wei (China)</li>
+                </ul>
+                
+                <h3 style="margin-top: 2rem;">Jadwal Acara</h3>
+                <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.6;">
+                    <li><strong>Pembukaan Virtual:</strong> 15 November, 19.00 WIB</li>
+                    <li><strong>Artist Talk:</strong> 22 November, 16.00 WIB</li>
+                    <li><strong>Workshop Digital Art:</strong> 29 November, 14.00 WIB</li>
+                    <li><strong>Penutupan & Pengumuman Pemenang:</strong> 15 Desember, 18.00 WIB</li>
+                </ul>
+                
+                <h3 style="margin-top: 2rem;">Cara Berpartisipasi</h3>
+                <p style="margin: 1rem 0; line-height: 1.6;">
+                    Untuk mengunjungi pameran, cukup buka situs ini selama periode pameran. Jika Anda ingin 
+                    menampilkan karya Anda, silakan unggah karya melalui halaman Unggah Karya setelah mendaftar 
+                    sebagai anggota.
+                </p>
+            </div>
+        </section>
+
+        <!-- Halaman Galeri Karya -->
+        <section id="gallery" style="display: none;">
+            <h1>Galeri Karya</h1>
+            <div style="margin: 1rem 0;">
+                <select style="padding: 0.5rem; border-radius: 4px;">
+                    <option>Semua Kategori</option>
+                    <option>Abstrak</option>
+                    <option>Realisme Digital</option>
+                    <option>3D Modeling</option>
+                    <option>Vector Art</option>
+                    <option>Foto Manipulasi</option>
+                </select>
+                <select style="padding: 0.5rem; border-radius: 4px; margin-left: 1rem;">
+                    <option>Urutkan berdasarkan</option>
+                    <option>Terbaru</option>
+                    <option>Terlama</option>
+                    <option>Harga Tertinggi</option>
+                    <option>Harga Terendah</option>
+                    <option>Paling Populer</option>
+                </select>
+            </div>
+            
+            <div class="art-grid">
+                <div class="art-card">
+                    <img src="https://via.placeholder.com/300x200?text=Abstract+1" alt="Abstract Art 1">
+                    <div class="art-info">
+                        <h3>Color Explosion</h3>
+                        <p>Karya: Sarah Miller</p>
+                        <p class="price">Rp 1.200.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://via.placeholder.com/300x200?text=3D+Art+1" alt="3D Art 1">
+                    <div class="art-info">
+                        <h3>Futuristic City</h3>
+                        <p>Karya: David Kim</p>
+                        <p class="price">Rp 3.500.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://via.placeholder.com/300x200?text=Vector+1" alt="Vector Art 1">
+                    <div class="art-info">
+                        <h3>Minimalist Portrait</h3>
+                        <p>Karya: Lisa Wong</p>
+                        <p class="price">Rp 750.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://via.placeholder.com/300x200?text=Photo+Manip+1" alt="Photo Manipulation 1">
+                    <div class="art-info">
+                        <h3>Dreamscape</h3>
+                        <p>Karya: Michael Brown</p>
+                        <p class="price">Rp 1.800.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://via.placeholder.com/300x200?text=Digital+Painting+1" alt="Digital Painting 1">
+                    <div class="art-info">
+                        <h3>Ocean Symphony</h3>
+                        <p>Karya: Emma Wilson</p>
+                        <p class="price">Rp 2.100.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://via.placeholder.com/300x200?text=Abstract+2" alt="Abstract Art 2">
+                    <div class="art-info">
+                        <h3>Emotional Chaos</h3>
+                        <p>Karya: Robert Chen</p>
+                        <p class="price">Rp 950.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Unggah Karya -->
+        <section id="upload" style="display: none;">
+            <h1>Unggah Karya Anda</h1>
+            <form class="upload-form">
+                <img id="artPreview" class="upload-preview" alt="Pratinjau Karya">
+                <div class="form-group">
+                    <label for="artFile">Pilih File Karya (JPG, PNG, GIF, maks. 10MB)</label>
+                    <input type="file" id="artFile" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label for="artTitle">Judul Karya</label>
+                    <input type="text" id="artTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="artDescription">Deskripsi Karya</label>
+                    <textarea id="artDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="artCategory">Kategori</label>
+                    <select id="artCategory" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="abstract">Abstrak</option>
+                        <option value="realism">Realisme Digital</option>
+                        <option value="3d">3D Modeling</option>
+                        <option value="vector">Vector Art</option>
+                        <option value="photo">Foto Manipulasi</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="artPrice">Harga (Rp)</label>
+                    <input type="number" id="artPrice" min="0" required>
+                </div>
+                <button type="submit" class="submit-btn">Unggah Karya</button>
+            </form>
+        </section>
+
+        <!-- Halaman Pembelian -->
+        <section id="purchase" style="display: none;">
+            <h1>Pembelian Karya</h1>
+            <div style="display: flex; gap: 2rem; margin-top: 2rem;">
+                <div style="flex: 1; background-color: white; padding: 2rem; border-radius: 8px;">
+                    <h2 style="margin-bottom: 1rem;">Detail Karya</h2>
+                    <img src="https://via.placeholder.com/500x300?text=Selected+Art" alt="Selected Art" style="width: 100%; border-radius: 4px; margin-bottom: 1rem;">
+                    <h3>Neon Jungle</h3>
+                    <p style="margin: 0.5rem 0;">Karya: John Smith</p>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #2c3e50; margin: 1rem 0;">Rp 2.300.000</p>
+                    <p style="line-height: 1.6;">Karya digital ini menggambarkan hutan urban futuristik dengan pencahayaan neon yang memukau. Dibuat menggunakan teknik digital painting dengan resolusi 6000x4000px.</p>
+                </div>
+                <div style="flex: 1; background-color: white; padding: 2rem; border-radius: 8px;">
+                    <h2 style="margin-bottom: 1rem;">Informasi Pembeli</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="buyerName">Nama Lengkap</label>
+                            <input type="text" id="buyerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerEmail">Email</label>
+                            <input type="email" id="buyerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerPhone">Nomor Telepon</label>
+                            <input type="tel" id="buyerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerAddress">Alamat Pengiriman (untuk sertifikat fisik)</label>
+                            <textarea id="buyerAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentMethod">Metode Pembayaran</label>
+                            <select id="paymentMethod" required>
+                                <option value="">Pilih Metode</option>
+                                <option value="bank">Transfer Bank</option>
+                                <option value="credit">Kartu Kredit</option>
+                                <option value="ewallet">E-Wallet</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Lanjutkan ke Pembayaran</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Transaksi -->
+        <section id="transactions" style="display: none;">
+            <h1>Riwayat Transaksi</h1>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>ID Transaksi</th>
+                        <th>Karya</th>
+                        <th>Seniman</th>
+                        <th>Tanggal</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#TRX-2023-001</td>
+                        <td>Cyber Dreams</td>
+                        <td>Jane Doe</td>
+                        <td>12 Nov 2023</td>
+                        <td>Rp 1.500.000</td>
+                        <td style="color: green;">Selesai</td>
+                    </tr>
+                    <tr>
+                        <td>#TRX-2023-002</td>
+                        <td>Neon Jungle</td>
+                        <td>John Smith</td>
+                        <td>5 Nov 2023</td>
+                        <td>Rp 2.300.000</td>
+                        <td style="color: green;">Selesai</td>
+                    </tr>
+                    <tr>
+                        <td>#TRX-2023-003</td>
+                        <td>Abstract Reality</td>
+                        <td>Alex Johnson</td>
+                        <td>1 Nov 2023</td>
+                        <td>Rp 950.000</td>
+                        <td style="color: orange;">Proses</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Halaman Komentar -->
+        <section id="comments" style="display: none;">
+            <div style="display: flex; gap: 2rem;">
+                <div style="flex: 1;">
+                    <img src="https://via.placeholder.com/600x400?text=Art+Detail" alt="Art Detail" style="width: 100%; border-radius: 8px;">
+                </div>
+                <div style="flex: 1;">
+                    <h2>Neon Jungle</h2>
+                    <p style="margin: 0.5rem 0 1.5rem;">Karya: John Smith</p>
+                    
+                    <div class="comments-section">
+                        <h3>Komentar (5)</h3>
+                        
+                        <form class="comment-form">
+                            <textarea placeholder="Tulis komentar Anda tentang karya ini..."></textarea>
+                            <button type="submit" class="submit-btn">Kirim Komentar</button>
+                        </form>
+                        
+                        <div class="comment">
+                            <div class="comment-author">Sarah Miller</div>
+                            <div class="comment-date">10 November 2023, 14:32</div>
+                            <div class="comment-content">Karya yang sangat memukau! Saya suka bagaimana Anda memadukan warna neon dengan suasana urban.</div>
+                        </div>
+                        
+                        <div class="comment">
+                            <div class="comment-author">David Kim</div>
+                            <div class="comment-date">8 November 2023, 09:15</div>
+                            <div class="comment-content">Detail-detail kecil dalam karya ini benar-benar mengagumkan. Bagaimana proses pembuatannya?</div>
+                        </div>
+                        
+                        <div class="comment">
+                            <div class="comment-author">Lisa Wong</div>
+                            <div class="comment-date">5 November 2023, 18:47</div>
+                            <div class="comment-content">Saya baru saja membeli karya ini dan sangat puas dengan kualitasnya. Terima kasih!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Digital Art Gallery. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript untuk navigasi dan fungsi lainnya
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variabel untuk halaman aktif
+            let currentPage = 'home';
+            
+            // Fungsi untuk menampilkan halaman tertentu
+            function showPage(pageId) {
+                // Sembunyikan semua halaman
+                document.querySelectorAll('main > section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Tampilkan halaman yang dipilih
+                document.getElementById(pageId).style.display = 'block';
+                currentPage = pageId;
+            }
+            
+            // Event listener untuk navigasi
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('href').substring(1);
+                    showPage(pageId);
+                    
+                    // Scroll ke atas
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Modal functionality
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+            const closeBtns = document.querySelectorAll('.close-btn');
+            
+            loginBtn.addEventListener('click', () => {
+                loginModal.style.display = 'block';
+            });
+            
+            registerBtn.addEventListener('click', () => {
+                registerModal.style.display = 'block';
+            });
+            
+            showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'block';
+            });
+            
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'block';
+            });
+            
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    loginModal.style.display = 'none';
+                    registerModal.style.display = 'none';
+                });
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+                if (e.target === registerModal) {
+                    registerModal.style.display = 'none';
+                }
+            });
+            
+            // Form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Login berhasil!');
+                loginModal.style.display = 'none';
+            });
+            
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Pendaftaran berhasil! Silakan login.');
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'block';
+            });
+            
+            // Image preview for upload
+            document.getElementById('artFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const preview = document.getElementById('artPreview');
+                        preview.src = event.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Buy button functionality
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showPage('purchase');
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Initialize with home page
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
