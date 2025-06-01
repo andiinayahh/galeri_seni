@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Art Gallery - Galeri Karya</title>
+    <title>Digital Art Gallery - Pameran Seni Digital</title>
     <style>
+        /* CSS Global */
         * {
             margin: 0;
             padding: 0;
@@ -31,19 +32,6 @@
             font-size: 1.8rem;
             font-weight: bold;
         }
-
-        .logo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.logo:hover {
-    color: #3498db;
-    cursor: pointer;
-}
         
         nav ul {
             display: flex;
@@ -61,7 +49,7 @@
             transition: color 0.3s;
         }
         
-        nav ul li a:hover, nav ul li a.active {
+        nav ul li a:hover {
             color: #3498db;
         }
         
@@ -107,20 +95,102 @@
             margin-top: 2rem;
         }
         
-        /* Gallery Page Styles */
-        .filters {
-            margin: 1rem 0;
-            display: flex;
-            gap: 1rem;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
         }
         
-        .filters select {
-            padding: 0.5rem;
-            border-radius: 4px;
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .close-btn {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
             border: 1px solid #ddd;
+            border-radius: 4px;
         }
         
-        /* Art Grid */
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Page Specific Styles */
+        .hero {
+            background-color: #3498db;
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .cta-button {
+            background-color: white;
+            color: #3498db;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #f1f1f1;
+        }
+        
         .art-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -174,38 +244,321 @@
             cursor: pointer;
             margin-top: 0.5rem;
             width: 100%;
-            text-decoration: none;
-            display: block;
-            text-align: center;
         }
         
         .buy-btn:hover {
             background-color: #2980b9;
         }
+        
+        /* Upload Form */
+        .upload-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .upload-form h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .upload-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            border: 1px dashed #ddd;
+            display: none;
+        }
+        
+        /* Transaction Page */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .transaction-table th, .transaction-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .transaction-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .transaction-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .comment {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comment:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .comment-date {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        .comment-content {
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
-<header>
-    <a href="index.html" class="logo">Digital Art Gallery</a>
-    <nav>
-        <ul>
-            <li><a href="index.html" class="active">Beranda</a></li>
-            <li><a href="galeri.html">Galeri Karya</a></li>
-            <li><a href="informasi.html">Informasi Pameran</a></li>
-            <li><a href="upload.html">Unggah Karya</a></li>
-        </ul>
-    </nav>
-    <div class="auth-buttons">
-        <button class="login-btn" id="loginBtn">Masuk</button>
-        <button class="register-btn" id="registerBtn">Daftar</button>
-    </div>
-</header>
+    <!-- Header dengan Navigasi -->
+    <header>
+        <div class="logo">Digital Art Gallery</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#exhibition-info">Informasi Pameran</a></li>
+                <li><a href="#gallery">Galeri Karya</a></li>
+                <li><a href="#upload">Unggah Karya</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login-btn" id="loginBtn">Masuk</button>
+            <button class="register-btn" id="registerBtn">Daftar</button>
+        </div>
+    </header>
 
+    <!-- Modal Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Masuk ke Akun Anda</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Kata Sandi</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Masuk</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Belum punya akun? <a href="#" id="showRegister">Daftar sekarang</a></p>
+        </div>
+    </div>
+
+    <!-- Modal Registrasi -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Buat Akun Baru</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regName">Nama Lengkap</label>
+                    <input type="text" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Kata Sandi</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Konfirmasi Kata Sandi</label>
+                    <input type="password" id="regConfirmPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Daftar</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Sudah punya akun? <a href="#" id="showLogin">Masuk</a></p>
+        </div>
+    </div>
+
+    <!-- Konten Utama -->
     <main>
-        <section id="gallery">
+        <!-- Halaman Beranda -->
+        <section id="home">
+            <div class="hero">
+                <h1>Selamat Datang di Pameran Seni Digital</h1>
+                <p>Temukan karya seni digital terbaik dari seniman berbakat di seluruh dunia. Jelajahi, beli, atau tampilkan karya Anda sendiri dalam platform kami.</p>
+                <button class="cta-button">Jelajahi Karya</button>
+            </div>
+            
+            <h2>Karya Terbaru</h2>
+            <div class="art-grid">
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop" alt="Abstract Digital Art">
+                    <div class="art-info">
+                        <h3>Cyber Dreams</h3>
+                        <p>Karya: Jane Doe</p>
+                        <p class="price">Rp 1.500.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop" alt="Neon Jungle">
+                    <div class="art-info">
+                        <h3>Neon Jungle</h3>
+                        <p>Karya: John Smith</p>
+                        <p class="price">Rp 2.300.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&h=300&fit=crop" alt="Abstract Reality">
+                    <div class="art-info">
+                        <h3>Abstract Reality</h3>
+                        <p>Karya: Alex Johnson</p>
+                        <p class="price">Rp 950.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=300&fit=crop" alt="Digital Portrait">
+                    <div class="art-info">
+                        <h3>Digital Portrait</h3>
+                        <p>Karya: Maria Garcia</p>
+                        <p class="price">Rp 1.800.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=400&h=300&fit=crop" alt="Space Odyssey">
+                    <div class="art-info">
+                        <h3>Space Odyssey</h3>
+                        <p>Karya: Chen Wei</p>
+                        <p class="price">Rp 2.750.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?w=400&h=300&fit=crop" alt="Geometric Dreams">
+                    <div class="art-info">
+                        <h3>Geometric Dreams</h3>
+                        <p>Karya: Sarah Miller</p>
+                        <p class="price">Rp 1.200.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop" alt="Digital Landscape">
+                    <div class="art-info">
+                        <h3>Digital Landscape</h3>
+                        <p>Karya: David Kim</p>
+                        <p class="price">Rp 2.100.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="Color Flow">
+                    <div class="art-info">
+                        <h3>Color Flow</h3>
+                        <p>Karya: Lisa Wong</p>
+                        <p class="price">Rp 1.650.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop" alt="Urban Chaos">
+                    <div class="art-info">
+                        <h3>Urban Chaos</h3>
+                        <p>Karya: Michael Brown</p>
+                        <p class="price">Rp 1.900.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="art-card">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop" alt="Ethereal Beauty">
+                    <div class="art-info">
+                        <h3>Ethereal Beauty</h3>
+                        <p>Karya: Emma Wilson</p>
+                        <p class="price">Rp 2.450.000</p>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Informasi Pameran -->
+        <section id="exhibition-info" style="display: none;">
+            <h1>Informasi Pameran</h1>
+            <div style="background-color: white; padding: 2rem; border-radius: 8px; margin-top: 1rem;">
+                <h2>Pameran Seni Digital Kontemporer 2023</h2>
+                <p style="margin: 1rem 0;"><strong>Tanggal:</strong> 15 November - 15 Desember 2023</p>
+                <p style="margin: 1rem 0;"><strong>Lokasi:</strong> Virtual Exhibition - Digital Art Gallery</p>
+                
+                <h3 style="margin-top: 2rem;">Tentang Pameran</h3>
+                <p style="margin: 1rem 0; line-height: 1.6;">
+                    Pameran Seni Digital Kontemporer 2023 menampilkan karya-karya inovatif dari seniman digital terkemuka 
+                    dan pendatang baru dari seluruh dunia. Pameran ini bertujuan untuk mendorong batas-batas ekspresi 
+                    kreatif melalui medium digital dan mengeksplorasi hubungan antara teknologi dan seni.
+                </p>
+                
+                <h3 style="margin-top: 2rem;">Seniman yang Berpartisipasi</h3>
+                <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.6;">
+                    <li>Jane Doe (AS)</li>
+                    <li>John Smith (UK)</li>
+                    <li>Alex Johnson (Australia)</li>
+                    <li>Maria Garcia (Spanyol)</li>
+                    <li>Chen Wei (China)</li>
+                </ul>
+                
+                <h3 style="margin-top: 2rem;">Jadwal Acara</h3>
+                <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.6;">
+                    <li><strong>Pembukaan Virtual:</strong> 15 November, 19.00 WIB</li>
+                    <li><strong>Artist Talk:</strong> 22 November, 16.00 WIB</li>
+                    <li><strong>Workshop Digital Art:</strong> 29 November, 14.00 WIB</li>
+                    <li><strong>Penutupan & Pengumuman Pemenang:</strong> 15 Desember, 18.00 WIB</li>
+                </ul>
+                
+                <h3 style="margin-top: 2rem;">Cara Berpartisipasi</h3>
+                <p style="margin: 1rem 0; line-height: 1.6;">
+                    Untuk mengunjungi pameran, cukup buka situs ini selama periode pameran. Jika Anda ingin 
+                    menampilkan karya Anda, silakan unggah karya melalui halaman Unggah Karya setelah mendaftar 
+                    sebagai anggota.
+                </p>
+            </div>
+        </section>
+
+        <!-- Halaman Galeri Karya -->
+        <section id="gallery" style="display: none;">
             <h1>Galeri Karya</h1>
-            <div class="filters">
-                <select>
+            <div style="margin: 1rem 0;">
+                <select style="padding: 0.5rem; border-radius: 4px;">
                     <option>Semua Kategori</option>
                     <option>Abstrak</option>
                     <option>Realisme Digital</option>
@@ -213,7 +566,7 @@
                     <option>Vector Art</option>
                     <option>Foto Manipulasi</option>
                 </select>
-                <select>
+                <select style="padding: 0.5rem; border-radius: 4px; margin-left: 1rem;">
                     <option>Urutkan berdasarkan</option>
                     <option>Terbaru</option>
                     <option>Terlama</option>
@@ -225,57 +578,223 @@
             
             <div class="art-grid">
                 <div class="art-card">
-                    <img src="https://via.placeholder.com/300x200?text=Abstract+1" alt="Abstract Art 1">
+                    <img src="https://thumbs.dreamstime.com/b/beatiful-abstrack-color-explosion-background-generative-ai-design-instagram-facebook-wall-painting-wallpaper-backgrounds-art-325295073.jpg" alt="Abstract Art 1">
                     <div class="art-info">
                         <h3>Color Explosion</h3>
                         <p>Karya: Sarah Miller</p>
                         <p class="price">Rp 1.200.000</p>
-                        <a href="purchase.html" class="buy-btn">Beli Sekarang</a>
+                        <button class="buy-btn">Beli Sekarang</button>
                     </div>
                 </div>
                 <div class="art-card">
-                    <img src="https://via.placeholder.com/300x200?text=3D+Art+1" alt="3D Art 1">
+                    <img src="data:image/jpeg;base64,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" alt="3D Art 1">
                     <div class="art-info">
                         <h3>Futuristic City</h3>
                         <p>Karya: David Kim</p>
                         <p class="price">Rp 3.500.000</p>
-                        <a href="purchase.html" class="buy-btn">Beli Sekarang</a>
+                        <button class="buy-btn">Beli Sekarang</button>
                     </div>
                 </div>
                 <div class="art-card">
-                    <img src="https://via.placeholder.com/300x200?text=Vector+1" alt="Vector Art 1">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTskk7u6popZWnOMEQMqUJXgaud0j05aup1Rw&s" alt="Vector Art 1">
                     <div class="art-info">
                         <h3>Minimalist Portrait</h3>
                         <p>Karya: Lisa Wong</p>
                         <p class="price">Rp 750.000</p>
-                        <a href="purchase.html" class="buy-btn">Beli Sekarang</a>
+                        <button class="buy-btn">Beli Sekarang</button>
                     </div>
                 </div>
                 <div class="art-card">
-                    <img src="https://via.placeholder.com/300x200?text=Photo+Manip+1" alt="Photo Manipulation 1">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS1yJV8b7L5AMU-M89nITtBswO9kT4ucS0qg&s" alt="Photo Manipulation 1">
                     <div class="art-info">
                         <h3>Dreamscape</h3>
                         <p>Karya: Michael Brown</p>
                         <p class="price">Rp 1.800.000</p>
-                        <a href="purchase.html" class="buy-btn">Beli Sekarang</a>
+                        <button class="buy-btn">Beli Sekarang</button>
                     </div>
                 </div>
                 <div class="art-card">
-                    <img src="https://via.placeholder.com/300x200?text=Digital+Painting+1" alt="Digital Painting 1">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDf_P2ysDsEJ_gwfSRJY2f3YYIInnZ_Cxcjw&s" alt="Digital Painting 1">
                     <div class="art-info">
                         <h3>Ocean Symphony</h3>
                         <p>Karya: Emma Wilson</p>
                         <p class="price">Rp 2.100.000</p>
-                        <a href="purchase.html" class="buy-btn">Beli Sekarang</a>
+                        <button class="buy-btn">Beli Sekarang</button>
                     </div>
                 </div>
                 <div class="art-card">
-                    <img src="https://via.placeholder.com/300x200?text=Abstract+2" alt="Abstract Art 2">
+                    <img src="data:image/jpeg;base64,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" alt="Abstract Art 2">
                     <div class="art-info">
                         <h3>Emotional Chaos</h3>
                         <p>Karya: Robert Chen</p>
                         <p class="price">Rp 950.000</p>
-                        <a href="purchase.html" class="buy-btn">Beli Sekarang</a>
+                        <button class="buy-btn">Beli Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Unggah Karya -->
+        <section id="upload" style="display: none;">
+            <h1>Unggah Karya Anda</h1>
+            <form class="upload-form">
+                <img id="artPreview" class="upload-preview" alt="Pratinjau Karya">
+                <div class="form-group">
+                    <label for="artFile">Pilih File Karya (JPG, PNG, GIF, maks. 10MB)</label>
+                    <input type="file" id="artFile" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label for="artTitle">Judul Karya</label>
+                    <input type="text" id="artTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="artDescription">Deskripsi Karya</label>
+                    <textarea id="artDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="artCategory">Kategori</label>
+                    <select id="artCategory" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="abstract">Abstrak</option>
+                        <option value="realism">Realisme Digital</option>
+                        <option value="3d">3D Modeling</option>
+                        <option value="vector">Vector Art</option>
+                        <option value="photo">Foto Manipulasi</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="artPrice">Harga (Rp)</label>
+                    <input type="number" id="artPrice" min="0" required>
+                </div>
+                <button type="submit" class="submit-btn">Unggah Karya</button>
+            </form>
+        </section>
+
+        <!-- Halaman Pembelian -->
+        <section id="purchase" style="display: none;">
+            <h1>Pembelian Karya</h1>
+            <div style="display: flex; gap: 2rem; margin-top: 2rem;">
+                <div style="flex: 1; background-color: white; padding: 2rem; border-radius: 8px;">
+                    <h2 style="margin-bottom: 1rem;">Detail Karya</h2>
+                    <img src="https://via.placeholder.com/500x300?text=Selected+Art" alt="Selected Art" style="width: 100%; border-radius: 4px; margin-bottom: 1rem;">
+                    <h3>Neon Jungle</h3>
+                    <p style="margin: 0.5rem 0;">Karya: John Smith</p>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #2c3e50; margin: 1rem 0;">Rp 2.300.000</p>
+                    <p style="line-height: 1.6;">Karya digital ini menggambarkan hutan urban futuristik dengan pencahayaan neon yang memukau. Dibuat menggunakan teknik digital painting dengan resolusi 6000x4000px.</p>
+                </div>
+                <div style="flex: 1; background-color: white; padding: 2rem; border-radius: 8px;">
+                    <h2 style="margin-bottom: 1rem;">Informasi Pembeli</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="buyerName">Nama Lengkap</label>
+                            <input type="text" id="buyerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerEmail">Email</label>
+                            <input type="email" id="buyerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerPhone">Nomor Telepon</label>
+                            <input type="tel" id="buyerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerAddress">Alamat Pengiriman (untuk sertifikat fisik)</label>
+                            <textarea id="buyerAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentMethod">Metode Pembayaran</label>
+                            <select id="paymentMethod" required>
+                                <option value="">Pilih Metode</option>
+                                <option value="bank">Transfer Bank</option>
+                                <option value="credit">Kartu Kredit</option>
+                                <option value="ewallet">E-Wallet</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Lanjutkan ke Pembayaran</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Transaksi -->
+        <section id="transactions" style="display: none;">
+            <h1>Riwayat Transaksi</h1>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>ID Transaksi</th>
+                        <th>Karya</th>
+                        <th>Seniman</th>
+                        <th>Tanggal</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#TRX-2023-001</td>
+                        <td>Cyber Dreams</td>
+                        <td>Jane Doe</td>
+                        <td>12 Nov 2023</td>
+                        <td>Rp 1.500.000</td>
+                        <td style="color: green;">Selesai</td>
+                    </tr>
+                    <tr>
+                        <td>#TRX-2023-002</td>
+                        <td>Neon Jungle</td>
+                        <td>John Smith</td>
+                        <td>5 Nov 2023</td>
+                        <td>Rp 2.300.000</td>
+                        <td style="color: green;">Selesai</td>
+                    </tr>
+                    <tr>
+                        <td>#TRX-2023-003</td>
+                        <td>Abstract Reality</td>
+                        <td>Alex Johnson</td>
+                        <td>1 Nov 2023</td>
+                        <td>Rp 950.000</td>
+                        <td style="color: orange;">Proses</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Halaman Komentar -->
+        <section id="comments" style="display: none;">
+            <div style="display: flex; gap: 2rem;">
+                <div style="flex: 1;">
+                    <img src="https://via.placeholder.com/600x400?text=Art+Detail" alt="Art Detail" style="width: 100%; border-radius: 8px;">
+                </div>
+                <div style="flex: 1;">
+                    <h2>Neon Jungle</h2>
+                    <p style="margin: 0.5rem 0 1.5rem;">Karya: John Smith</p>
+                    
+                    <div class="comments-section">
+                        <h3>Komentar (5)</h3>
+                        
+                        <form class="comment-form">
+                            <textarea placeholder="Tulis komentar Anda tentang karya ini..."></textarea>
+                            <button type="submit" class="submit-btn">Kirim Komentar</button>
+                        </form>
+                        
+                        <div class="comment">
+                            <div class="comment-author">Sarah Miller</div>
+                            <div class="comment-date">10 November 2023, 14:32</div>
+                            <div class="comment-content">Karya yang sangat memukau! Saya suka bagaimana Anda memadukan warna neon dengan suasana urban.</div>
+                        </div>
+                        
+                        <div class="comment">
+                            <div class="comment-author">David Kim</div>
+                            <div class="comment-date">8 November 2023, 09:15</div>
+                            <div class="comment-content">Detail-detail kecil dalam karya ini benar-benar mengagumkan. Bagaimana proses pembuatannya?</div>
+                        </div>
+                        
+                        <div class="comment">
+                            <div class="comment-author">Lisa Wong</div>
+                            <div class="comment-date">5 November 2023, 18:47</div>
+                            <div class="comment-content">Saya baru saja membeli karya ini dan sangat puas dengan kualitasnya. Terima kasih!</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -287,17 +806,118 @@
     </footer>
 
     <script>
+        // JavaScript untuk navigasi dan fungsi lainnya
         document.addEventListener('DOMContentLoaded', function() {
+            // Variabel untuk halaman aktif
+            let currentPage = 'home';
+            
+            // Fungsi untuk menampilkan halaman tertentu
+            function showPage(pageId) {
+                // Sembunyikan semua halaman
+                document.querySelectorAll('main > section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Tampilkan halaman yang dipilih
+                document.getElementById(pageId).style.display = 'block';
+                currentPage = pageId;
+            }
+            
+            // Event listener untuk navigasi
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('href').substring(1);
+                    showPage(pageId);
+                    
+                    // Scroll ke atas
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Modal functionality
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
             const loginBtn = document.getElementById('loginBtn');
             const registerBtn = document.getElementById('registerBtn');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+            const closeBtns = document.querySelectorAll('.close-btn');
             
-            if (loginBtn) loginBtn.addEventListener('click', () => {
-                alert('Fitur login akan dibuka di popup');
+            loginBtn.addEventListener('click', () => {
+                loginModal.style.display = 'block';
             });
             
-            if (registerBtn) registerBtn.addEventListener('click', () => {
-                alert('Fitur registrasi akan dibuka di popup');
+            registerBtn.addEventListener('click', () => {
+                registerModal.style.display = 'block';
             });
+            
+            showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'block';
+            });
+            
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'block';
+            });
+            
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    loginModal.style.display = 'none';
+                    registerModal.style.display = 'none';
+                });
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+                if (e.target === registerModal) {
+                    registerModal.style.display = 'none';
+                }
+            });
+            
+            // Form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Login berhasil!');
+                loginModal.style.display = 'none';
+            });
+            
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Pendaftaran berhasil! Silakan login.');
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'block';
+            });
+            
+            // Image preview for upload
+            document.getElementById('artFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const preview = document.getElementById('artPreview');
+                        preview.src = event.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Buy button functionality
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showPage('purchase');
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Initialize with home page
+            showPage('home');
         });
     </script>
 </body>
