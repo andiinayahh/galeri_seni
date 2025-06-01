@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Art Gallery - Informasi Pameran</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            color: #3498db;
+        }
+        
+        .auth-buttons button {
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .login-btn {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+        
+        .login-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .register-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .register-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        main {
+            padding: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .exhibition-details {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .exhibition-details h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .exhibition-details p {
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .exhibition-details h3 {
+            color: #2c3e50;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .exhibition-details ul {
+            margin: 1rem 0 1rem 2rem;
+            line-height: 1.6;
+        }
+        
+        .exhibition-details li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Digital Art Gallery</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                 <li><a href="galeri.html">Galeri Karya</a></li>
+                <li><a href="informasi.html" class="active">Informasi Pameran</a></li>
+                <li><a href="upload.html">Unggah Karya</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login-btn" id="loginBtn">Masuk</button>
+            <button class="register-btn" id="registerBtn">Daftar</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="exhibition-info">
+            <h1>Informasi Pameran</h1>
+            <div class="exhibition-details">
+                <h2>Pameran Seni Digital Kontemporer 2023</h2>
+                <p><strong>Tanggal:</strong> 15 November - 15 Desember 2023</p>
+                <p><strong>Lokasi:</strong> Virtual Exhibition - Digital Art Gallery</p>
+                
+                <h3>Tentang Pameran</h3>
+                <p>
+                    Pameran ini menampilkan karya-karya inovatif dari seniman digital terkemuka 
+                    dan pendatang baru dari seluruh dunia.
+                </p>
+                
+                <h3>Seniman yang Berpartisipasi</h3>
+                <ul>
+                    <li>Jane Doe (AS)</li>
+                    <li>John Smith (UK)</li>
+                    <li>Alex Johnson (Australia)</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Digital Art Gallery. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            
+            if (loginBtn) loginBtn.addEventListener('click', () => {
+                alert('Fitur login akan dibuka di popup');
+            });
+            
+            if (registerBtn) registerBtn.addEventListener('click', () => {
+                alert('Fitur registrasi akan dibuka di popup');
+            });
+        });
+    </script>
+</body>
+</html>
